@@ -76,8 +76,143 @@ window.addEventListener("scroll", () => {
   ) {
     for (let i = 0; i < 6; i++) createCard();
   }
+  });
+  <script>
+let imageCount = 1;
+const grid = document.getElementById("grid");
+
+/* DIFFERENT TITLES */
+const titles = [
+  "Discipline beats talent.",
+  "Focus on progress, not perfection.",
+  "Study today, shine tomorrow.",
+  "Hard work never goes waste.",
+  "Virat Kohli mindset: Never give up.",
+  "Dream big. Start small.",
+  "Consistency creates success.",
+  "Believe in yourself.",
+  "Success needs patience.",
+  "Make today count."
+];
+
+/* CREATE CARD */
+function createCard() {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const img = document.createElement("img");
+  img.src = `https://picsum.photos/500/${600 + (imageCount % 5) * 80}?random=${imageCount}`;
+  img.onclick = () => window.open(img.src, "_blank");
+
+  const p = document.createElement("p");
+  p.innerText = titles[imageCount % titles.length];
+
+  const actions = document.createElement("div");
+  actions.className = "actions";
+
+  const likeBtn = document.createElement("button");
+  likeBtn.innerHTML = "❤️ <span>0</span>";
+  likeBtn.onclick = () => {
+    const span = likeBtn.querySelector("span");
+    span.innerText = parseInt(span.innerText) + 1;
+  };
+
+  const downloadBtn = document.createElement("button");
+  downloadBtn.innerText = "⬇ Download";
+  downloadBtn.onclick = () => {
+    const a = document.createElement("a");
+    a.href = img.src;
+    a.download = "image.jpg";
+    a.click();
+  };
+
+  actions.appendChild(likeBtn);
+  actions.appendChild(downloadBtn);
+
+  card.appendChild(img);
+  card.appendChild(p);
+  card.appendChild(actions);
+
+  grid.appendChild(card);
+  imageCount++;
+}
+
+/* INITIAL LOAD */
+for (let i = 0; i < 8; i++) createCard();
+
+/* INFINITE SCROLL */
+window.addEventListener("scroll", () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+    for (let i = 0; i < 6; i++) createCard();
+  }
+});
+</script><script>
+let imageCount = 1;
+const grid = document.getElementById("grid");
+
+/* DIFFERENT TITLES */
+const titles = [
+  "Discipline beats talent.",
+  "Focus on progress, not perfection.",
+  "Study today, shine tomorrow.",
+  "Hard work never goes waste.",
+  "Virat Kohli mindset: Never give up.",
+  "Dream big. Start small.",
+  "Consistency creates success.",
+  "Believe in yourself.",
+  "Success needs patience.",
+  "Make today count."
+];
+
+/* CREATE CARD */
+function createCard() {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const img = document.createElement("img");
+  img.src = `https://picsum.photos/500/${600 + (imageCount % 5) * 80}?random=${imageCount}`;
+  img.onclick = () => window.open(img.src, "_blank");
+
+  const p = document.createElement("p");
+  p.innerText = titles[imageCount % titles.length];
+
+  const actions = document.createElement("div");
+  actions.className = "actions";
+
+  const likeBtn = document.createElement("button");
+  likeBtn.innerHTML = "❤️ <span>0</span>";
+  likeBtn.onclick = () => {
+    const span = likeBtn.querySelector("span");
+    span.innerText = parseInt(span.innerText) + 1;
+  };
+
+  const downloadBtn = document.createElement("button");
+  downloadBtn.innerText = "⬇ Download";
+  downloadBtn.onclick = () => {
+    const a = document.createElement("a");
+    a.href = img.src;
+    a.download = "image.jpg";
+    a.click();
+  };
+
+  actions.appendChild(likeBtn);
+  actions.appendChild(downloadBtn);
+
+  card.appendChild(img);
+  card.appendChild(p);
+  card.appendChild(actions);
+
+  grid.appendChild(card);
+  imageCount++;
+}
+
+/* INITIAL LOAD */
+for (let i = 0; i < 8; i++) createCard();
+
+/* INFINITE SCROLL */
+window.addEventListener("scroll", () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+    for (let i = 0; i < 6; i++) createCard();
+  }
 });
 </script>
-
-</body>
-</html>
