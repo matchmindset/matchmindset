@@ -2,217 +2,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>InspireWall</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      padding: 12px 16px;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid #ddd;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    header p {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* ===== LOGIN ===== */
+    #authBox {
+      margin-top: 10px;
+    }
+
+    #authBox button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    #loginBtn {
+      background: #4285f4;
+      color: white;
+    }
+
+    #logoutBtn {
+      background: #e53935;
+      color: white;
+      display: none;
+    }
+
+    #userInfo {
+      margin-top: 8px;
+      font-size: 13px;
+    }
+
+    /* ===== PINTEREST GRID ===== */
+    .grid {
+      column-count: 2;
+      column-gap: 10px;
+      padding: 10px;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        column-count: 4;
+      }
+    }
+
+    .card {
+      background: white;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+      break-inside: avoid;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .card img {
+      width: 100%;
+      display: block;
+      cursor: pointer;
+    }
+
+    .card p {
+      padding: 10px;
+      margin: 0;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 10px;
+    }
+
+    .actions button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
 
-<header class="site-header">
+<header>
   <h1>InspireWall</h1>
   <p>Motivation • Students • Cricket • Tools</p>
+
+  <div id="authBox">
+    <button id="loginBtn">Sign in with Google</button>
+    <button id="logoutBtn">Logout</button>
+    <div id="userInfo"></div>
+  </div>
 </header>
 
-<div class="pinterest-grid" id="grid">
-  <!-- Initial Cards -->
+<!-- ===== GRID ===== -->
+<div class="grid">
+  <div class="card">
+    <a href="https://picsum.photos/800/1200?1" target="_blank">
+      <img src="https://picsum.photos/400/600?1">
+    </a>
+    <p>Discipline beats talent.</p>
+    <div class="actions">
+      <button onclick="likePost(this)">❤️ <span>0</span></button>
+      <button onclick="sharePost()">🔗 Share</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="https://picsum.photos/800/900?2" target="_blank">
+      <img src="https://picsum.photos/400/500?2">
+    </a>
+    <p>Study today, shine tomorrow.</p>
+    <div class="actions">
+      <button onclick="likePost(this)">❤️ <span>0</span></button>
+      <button onclick="sharePost()">🔗 Share</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="https://picsum.photos/800/1000?3" target="_blank">
+      <img src="https://picsum.photos/400/550?3">
+    </a>
+    <p>Virat Kohli mindset: Never give up.</p>
+    <div class="actions">
+      <button onclick="likePost(this)">❤️ <span>0</span></button>
+      <button onclick="sharePost()">🔗 Share</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="https://picsum.photos/800/1100?4" target="_blank">
+      <img src="https://picsum.photos/400/650?4">
+    </a>
+    <p>Best Instagram bio ideas.</p>
+    <div class="actions">
+      <button onclick="likePost(this)">❤️ <span>0</span></button>
+      <button onclick="sharePost()">🔗 Share</button>
+    </div>
+  </div>
 </div>
 
-<script>
-let imageCount = 1;
-const grid = document.getElementById("grid");
+<!-- ===== FIREBASE + LOGIN ===== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-/* CREATE CARD */
-function createCard() {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  const img = document.createElement("img");
-  img.src = `https://picsum.photos/500/${600 + (imageCount % 5) * 80}?random=${imageCount}`;
-  img.onclick = () => window.open(img.src, "_blank");
-
-  const p = document.createElement("p");
-  p.innerText = "Stay focused. Keep growing.";
-
-  const actions = document.createElement("div");
-  actions.className = "actions";
-
-  const likeBtn = document.createElement("button");
-  likeBtn.innerHTML = "❤️ <span>0</span>";
-  likeBtn.onclick = () => {
-    const span = likeBtn.querySelector("span");
-    span.innerText = parseInt(span.innerText) + 1;
+  const firebaseConfig = {
+    apiKey: "AIzaSyCILgeG_8IhBpWaN4kuoajW8X83Z0s8GiY",
+    authDomain: "aman12947n-adcc4.firebaseapp.com",
+    projectId: "aman12947n-adcc4",
+    storageBucket: "aman12947n-adcc4.appspot.com",
+    messagingSenderId: "775824275952",
+    appId: "1:775824275952:web:9c22e8d8cb74a723274535"
   };
 
-  const downloadBtn = document.createElement("button");
-  downloadBtn.innerText = "⬇ Download";
-  downloadBtn.onclick = () => {
-    const a = document.createElement("a");
-    a.href = img.src;
-    a.download = "image.jpg";
-    a.click();
-  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
-  actions.appendChild(likeBtn);
-  actions.appendChild(downloadBtn);
+  loginBtn.onclick = () => signInWithPopup(auth, provider);
+  logoutBtn.onclick = () => signOut(auth);
 
-  card.appendChild(img);
-  card.appendChild(p);
-  card.appendChild(actions);
-
-  grid.appendChild(card);
-  imageCount++;
-}
-
-/* LOAD INITIAL */
-for (let i = 0; i < 8; i++) createCard();
-
-/* INFINITE SCROLL */
-window.addEventListener("scroll", () => {
-  if (
-    window.innerHeight + window.scrollY >=
-    document.body.offsetHeight - 200
-  ) {
-    for (let i = 0; i < 6; i++) createCard();
-  }
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginBtn.style.display = "none";
+      logoutBtn.style.display = "inline-block";
+      userInfo.innerHTML = `
+        <img src="${user.photoURL}" width="40" style="border-radius:50%"><br>
+        <b>${user.displayName}</b>
+      `;
+    } else {
+      loginBtn.style.display = "inline-block";
+      logoutBtn.style.display = "none";
+      userInfo.innerHTML = "";
+    }
   });
-  <script>
-let imageCount = 1;
-const grid = document.getElementById("grid");
-
-/* DIFFERENT TITLES */
-const titles = [
-  "Discipline beats talent.",
-  "Focus on progress, not perfection.",
-  "Study today, shine tomorrow.",
-  "Hard work never goes waste.",
-  "Virat Kohli mindset: Never give up.",
-  "Dream big. Start small.",
-  "Consistency creates success.",
-  "Believe in yourself.",
-  "Success needs patience.",
-  "Make today count."
-];
-
-/* CREATE CARD */
-function createCard() {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  const img = document.createElement("img");
-  img.src = `https://picsum.photos/500/${600 + (imageCount % 5) * 80}?random=${imageCount}`;
-  img.onclick = () => window.open(img.src, "_blank");
-
-  const p = document.createElement("p");
-  p.innerText = titles[imageCount % titles.length];
-
-  const actions = document.createElement("div");
-  actions.className = "actions";
-
-  const likeBtn = document.createElement("button");
-  likeBtn.innerHTML = "❤️ <span>0</span>";
-  likeBtn.onclick = () => {
-    const span = likeBtn.querySelector("span");
-    span.innerText = parseInt(span.innerText) + 1;
-  };
-
-  const downloadBtn = document.createElement("button");
-  downloadBtn.innerText = "⬇ Download";
-  downloadBtn.onclick = () => {
-    const a = document.createElement("a");
-    a.href = img.src;
-    a.download = "image.jpg";
-    a.click();
-  };
-
-  actions.appendChild(likeBtn);
-  actions.appendChild(downloadBtn);
-
-  card.appendChild(img);
-  card.appendChild(p);
-  card.appendChild(actions);
-
-  grid.appendChild(card);
-  imageCount++;
-}
-
-/* INITIAL LOAD */
-for (let i = 0; i < 8; i++) createCard();
-
-/* INFINITE SCROLL */
-window.addEventListener("scroll", () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-    for (let i = 0; i < 6; i++) createCard();
-  }
-});
-</script><script>
-let imageCount = 1;
-const grid = document.getElementById("grid");
-
-/* DIFFERENT TITLES */
-const titles = [
-  "Discipline beats talent.",
-  "Focus on progress, not perfection.",
-  "Study today, shine tomorrow.",
-  "Hard work never goes waste.",
-  "Virat Kohli mindset: Never give up.",
-  "Dream big. Start small.",
-  "Consistency creates success.",
-  "Believe in yourself.",
-  "Success needs patience.",
-  "Make today count."
-];
-
-/* CREATE CARD */
-function createCard() {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  const img = document.createElement("img");
-  img.src = `https://picsum.photos/500/${600 + (imageCount % 5) * 80}?random=${imageCount}`;
-  img.onclick = () => window.open(img.src, "_blank");
-
-  const p = document.createElement("p");
-  p.innerText = titles[imageCount % titles.length];
-
-  const actions = document.createElement("div");
-  actions.className = "actions";
-
-  const likeBtn = document.createElement("button");
-  likeBtn.innerHTML = "❤️ <span>0</span>";
-  likeBtn.onclick = () => {
-    const span = likeBtn.querySelector("span");
-    span.innerText = parseInt(span.innerText) + 1;
-  };
-
-  const downloadBtn = document.createElement("button");
-  downloadBtn.innerText = "⬇ Download";
-  downloadBtn.onclick = () => {
-    const a = document.createElement("a");
-    a.href = img.src;
-    a.download = "image.jpg";
-    a.click();
-  };
-
-  actions.appendChild(likeBtn);
-  actions.appendChild(downloadBtn);
-
-  card.appendChild(img);
-  card.appendChild(p);
-  card.appendChild(actions);
-
-  grid.appendChild(card);
-  imageCount++;
-}
-
-/* INITIAL LOAD */
-for (let i = 0; i < 8; i++) createCard();
-
-/* INFINITE SCROLL */
-window.addEventListener("scroll", () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-    for (let i = 0; i < 6; i++) createCard();
-  }
-});
 </script>
+
+<!-- ===== BASIC JS ===== -->
+<script>
+  function likePost(btn) {
+    const span = btn.querySelector("span");
+    span.innerText = parseInt(span.innerText) + 1;
+  }
+
+  function sharePost() {
+    if (navigator.share) {
+      navigator.share({
+        title: "InspireWall",
+        url: window.location.href
+      });
+    } else {
+      alert("Share not supported");
+    }
+  }
+</script>
+
+</body>
+</html>
