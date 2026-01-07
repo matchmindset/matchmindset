@@ -10,7 +10,7 @@ body {
 .site-header {
   background: #000;
   text-align: center;
-  padding: 10px 12px;
+  padding: 8px 10px;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -18,8 +18,7 @@ body {
 
 .site-header h1 {
   margin: 0;
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 20px;
 }
 
 .site-header p {
@@ -28,28 +27,27 @@ body {
   color: #aaa;
 }
 
-/* ===== PINTEREST GRID ===== */
+/* ===== GRID (AGAL-BAGAL FIXED) ===== */
 .pinterest-grid {
-  column-count: 2;
-  column-gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* mobile */
+  gap: 12px;
   padding: 12px;
 }
 
 @media (min-width: 768px) {
   .pinterest-grid {
-    column-count: 4;
+    grid-template-columns: repeat(4, 1fr); /* desktop */
   }
 }
 
+/* ===== CARD ===== */
 .card {
-  break-inside: avoid;
-  margin-bottom: 12px;
   background: #1c1c1c;
   border-radius: 14px;
   overflow: hidden;
 }
 
-/* ===== IMAGE ===== */
 .card img {
   width: 100%;
   display: block;
@@ -60,6 +58,7 @@ body {
 .card p {
   padding: 8px 10px;
   font-size: 14px;
+  margin: 0;
 }
 
 /* ===== ACTIONS ===== */
