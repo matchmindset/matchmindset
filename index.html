@@ -10,72 +10,74 @@
 
 <body>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <h1>InspireWall</h1>
-    <p>Motivation • Students • Cricket • Tools</p>
-  </header>
+<header class="site-header">
+  <h1>InspireWall</h1>
+  <p>Motivation • Students • Cricket • Tools</p>
+</header>
 
-  <!-- GRID -->
-  <div class="pinterest-grid">
+<div class="pinterest-grid" id="grid">
+  <!-- Initial Cards -->
+</div>
 
-    <div class="card">
-      <img src="https://picsum.photos/500/700" onclick="openImage(this)">
-      <p>Discipline beats talent.</p>
-      <div class="actions">
-        <button onclick="likePost(this)">❤️ <span>0</span></button>
-        <button onclick="downloadImage(this)">⬇ Download</button>
-      </div>
-    </div>
+<script>
+let imageCount = 1;
+const grid = document.getElementById("grid");
 
-    <div class="card">
-      <img src="https://picsum.photos/500/600" onclick="openImage(this)">
-      <p>Study today, shine tomorrow.</p>
-      <div class="actions">
-        <button onclick="likePost(this)">❤️ <span>0</span></button>
-        <button onclick="downloadImage(this)">⬇ Download</button>
-      </div>
-    </div>
+/* CREATE CARD */
+function createCard() {
+  const card = document.createElement("div");
+  card.className = "card";
 
-    <div class="card">
-      <img src="https://picsum.photos/500/800" onclick="openImage(this)">
-      <p>Virat Kohli mindset: Never give up.</p>
-      <div class="actions">
-        <button onclick="likePost(this)">❤️ <span>0</span></button>
-        <button onclick="downloadImage(this)">⬇ Download</button>
-      </div>
-    </div>
+  const img = document.createElement("img");
+  img.src = `https://picsum.photos/500/${600 + (imageCount % 5) * 80}?random=${imageCount}`;
+  img.onclick = () => window.open(img.src, "_blank");
 
-    <div class="card">
-      <img src="https://picsum.photos/500/650" onclick="openImage(this)">
-      <p>Best Instagram bio ideas.</p>
-      <div class="actions">
-        <button onclick="likePost(this)">❤️ <span>0</span></button>
-        <button onclick="downloadImage(this)">⬇ Download</button>
-      </div>
-    </div>
+  const p = document.createElement("p");
+  p.innerText = "Stay focused. Keep growing.";
 
-  </div>
+  const actions = document.createElement("div");
+  actions.className = "actions";
 
-  <!-- SCRIPT -->
-  <script>
-    function openImage(img) {
-      window.open(img.src, "_blank");
-    }
+  const likeBtn = document.createElement("button");
+  likeBtn.innerHTML = "❤️ <span>0</span>";
+  likeBtn.onclick = () => {
+    const span = likeBtn.querySelector("span");
+    span.innerText = parseInt(span.innerText) + 1;
+  };
 
-    function downloadImage(btn) {
-      const img = btn.closest(".card").querySelector("img");
-      const a = document.createElement("a");
-      a.href = img.src;
-      a.download = "image.jpg";
-      a.click();
-    }
+  const downloadBtn = document.createElement("button");
+  downloadBtn.innerText = "⬇ Download";
+  downloadBtn.onclick = () => {
+    const a = document.createElement("a");
+    a.href = img.src;
+    a.download = "image.jpg";
+    a.click();
+  };
 
-    function likePost(btn) {
-      let span = btn.querySelector("span");
-      span.innerText = parseInt(span.innerText) + 1;
-    }
-  </script>
+  actions.appendChild(likeBtn);
+  actions.appendChild(downloadBtn);
+
+  card.appendChild(img);
+  card.appendChild(p);
+  card.appendChild(actions);
+
+  grid.appendChild(card);
+  imageCount++;
+}
+
+/* LOAD INITIAL */
+for (let i = 0; i < 8; i++) createCard();
+
+/* INFINITE SCROLL */
+window.addEventListener("scroll", () => {
+  if (
+    window.innerHeight + window.scrollY >=
+    document.body.offsetHeight - 200
+  ) {
+    for (let i = 0; i < 6; i++) createCard();
+  }
+});
+</script>
 
 </body>
 </html>
