@@ -6,150 +6,76 @@
   <title>InspireWall</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-    }
-
-    header {
-      text-align: center;
-      padding: 20px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 15px;
-      padding: 15px;
-    }
-
-    .card {
-      background: #1c1c1c;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .card img {
-      width: 100%;
-      display: block;
-      cursor: pointer;
-    }
-
-    .card p {
-      padding: 10px;
-      font-size: 14px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-      padding: 10px;
-    }
-
-    .actions button {
-      flex: 1;
-      border: none;
-      border-radius: 20px;
-      padding: 6px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .like-btn {
-      background: #e60023;
-      color: white;
-    }
-
-    .share-btn {
-      background: #444;
-      color: white;
-    }
-
-    .download-btn {
-      background: #0084ff;
-      color: white;
-    }
-  </style>
 </head>
 
 <body>
 
-<header>
-  <h1>InspireWall</h1>
-  <p>Motivation • Students • Cricket • Tools</p>
-</header>
+  <!-- HEADER -->
+  <header class="site-header">
+    <h1>InspireWall</h1>
+    <p>Motivation • Students • Cricket • Tools</p>
+  </header>
 
-<div class="grid">
+  <!-- GRID -->
+  <div class="pinterest-grid">
 
-  <!-- CARD 1 -->
-  <div class="card">
-    <a href="https://picsum.photos/900/1400?1" target="_blank">
-      <img src="https://picsum.photos/400/600?1">
-    </a>
-    <p>Discipline beats talent.</p>
-    <div class="actions">
-      <button class="like-btn" onclick="likePost(this)">❤️ <span>0</span></button>
-      <button class="download-btn" onclick="downloadImage('https://picsum.photos/900/1400?1')">⬇️</button>
+    <div class="card">
+      <img src="https://picsum.photos/500/700" onclick="openImage(this)">
+      <p>Discipline beats talent.</p>
+      <div class="actions">
+        <button onclick="likePost(this)">❤️ <span>0</span></button>
+        <button onclick="downloadImage(this)">⬇ Download</button>
+      </div>
     </div>
+
+    <div class="card">
+      <img src="https://picsum.photos/500/600" onclick="openImage(this)">
+      <p>Study today, shine tomorrow.</p>
+      <div class="actions">
+        <button onclick="likePost(this)">❤️ <span>0</span></button>
+        <button onclick="downloadImage(this)">⬇ Download</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://picsum.photos/500/800" onclick="openImage(this)">
+      <p>Virat Kohli mindset: Never give up.</p>
+      <div class="actions">
+        <button onclick="likePost(this)">❤️ <span>0</span></button>
+        <button onclick="downloadImage(this)">⬇ Download</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://picsum.photos/500/650" onclick="openImage(this)">
+      <p>Best Instagram bio ideas.</p>
+      <div class="actions">
+        <button onclick="likePost(this)">❤️ <span>0</span></button>
+        <button onclick="downloadImage(this)">⬇ Download</button>
+      </div>
+    </div>
+
   </div>
 
-  <!-- CARD 2 -->
-  <div class="card">
-    <a href="https://picsum.photos/900/1400?2" target="_blank">
-      <img src="https://picsum.photos/400/600?2">
-    </a>
-    <p>Study today, shine tomorrow.</p>
-    <div class="actions">
-      <button class="like-btn" onclick="likePost(this)">❤️ <span>0</span></button>
-      <button class="download-btn" onclick="downloadImage('https://picsum.photos/900/1400?2')">⬇️</button>
-    </div>
-  </div>
+  <!-- SCRIPT -->
+  <script>
+    function openImage(img) {
+      window.open(img.src, "_blank");
+    }
 
-  <!-- CARD 3 -->
-  <div class="card">
-    <a href="https://picsum.photos/900/1400?3" target="_blank">
-      <img src="https://picsum.photos/400/600?3">
-    </a>
-    <p>Virat Kohli mindset: Never give up.</p>
-    <div class="actions">
-      <button class="like-btn" onclick="likePost(this)">❤️ <span>0</span></button>
-      <button class="download-btn" onclick="downloadImage('https://picsum.photos/900/1400?3')">⬇️</button>
-    </div>
-  </div>
+    function downloadImage(btn) {
+      const img = btn.closest(".card").querySelector("img");
+      const a = document.createElement("a");
+      a.href = img.src;
+      a.download = "image.jpg";
+      a.click();
+    }
 
-  <!-- CARD 4 -->
-  <div class="card">
-    <a href="https://picsum.photos/900/1400?4" target="_blank">
-      <img src="https://picsum.photos/400/600?4">
-    </a>
-    <p>Best Instagram bio ideas.</p>
-    <div class="actions">
-      <button class="like-btn" onclick="likePost(this)">❤️ <span>0</span></button>
-      <button class="download-btn" onclick="downloadImage('https://picsum.photos/900/1400?4')">⬇️</button>
-    </div>
-  </div>
-
-</div>
-
-<script>
-function likePost(btn) {
-  const span = btn.querySelector("span");
-  span.innerText = parseInt(span.innerText) + 1;
-}
-
-function downloadImage(url) {
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "image.jpg";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-</script>
+    function likePost(btn) {
+      let span = btn.querySelector("span");
+      span.innerText = parseInt(span.innerText) + 1;
+    }
+  </script>
 
 </body>
 </html>
