@@ -5,7 +5,6 @@
   <title>InspireWall Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- ===== CSS ===== -->
   <style>
     * {
       margin: 0;
@@ -15,41 +14,41 @@
     }
 
     body {
-      background: #fff;
-      overflow: hidden;
+      background: #f5f5f5;
     }
 
     /* MAIN LAYOUT */
     .auth-page {
       display: flex;
-      height: 100vh;
+      min-height: 100vh;
       width: 100%;
+      overflow: hidden;
     }
 
-    /* LEFT IMAGE — FIXED (NO GLITCH) */
+    /* LEFT IMAGE (NO GLITCH, ALWAYS VISIBLE) */
     .left-image {
-      position: fixed;
-      left: 0;
-      top: 0;
       width: 50%;
       height: 100vh;
+      position: sticky;
+      top: 0;
     }
 
     .left-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
 
-    /* RIGHT SIDE */
+    /* RIGHT AUTH */
     .right-auth {
-      margin-left: 50%;
       width: 50%;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #f9f9f9;
+      padding: 20px;
     }
 
     .auth-box {
@@ -57,7 +56,7 @@
       padding: 30px;
       width: 100%;
       max-width: 360px;
-      border-radius: 10px;
+      border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       text-align: center;
     }
@@ -83,10 +82,6 @@
       width: 20px;
     }
 
-    .user-info {
-      text-align: center;
-    }
-
     .user-info img {
       width: 80px;
       border-radius: 50%;
@@ -103,12 +98,13 @@
       cursor: pointer;
     }
 
+    /* MOBILE */
     @media (max-width: 768px) {
       .left-image {
         display: none;
       }
+
       .right-auth {
-        margin-left: 0;
         width: 100%;
       }
     }
@@ -120,7 +116,8 @@
 
     <!-- LEFT IMAGE -->
     <div class="left-image">
-      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" />
+      <!-- SAFE IMAGE SOURCE -->
+      <img src="https://picsum.photos/800/1200" alt="Background">
     </div>
 
     <!-- RIGHT AUTH -->
@@ -129,7 +126,7 @@
         <h2>Sign in to InspireWall</h2>
 
         <div class="google-btn" id="googleSignIn">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
           Sign in with Google
         </div>
       </div>
@@ -137,11 +134,16 @@
 
   </div>
 
-  <!-- ===== FIREBASE ===== -->
+  <!-- FIREBASE + GOOGLE LOGIN -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } 
-      from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCILgeG_8IhBpWaN4kuoajW8X83Z0s8GiY",
