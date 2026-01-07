@@ -1,11 +1,13 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>InspireWall</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <header>
@@ -14,26 +16,63 @@
 </header>
 
 <div class="grid">
+
   <div class="card">
     <img src="https://picsum.photos/400/600?1">
     <p>Discipline beats talent.</p>
+    <div class="actions">
+      <button class="like-btn" onclick="likePost(this)">❤️ <span>0</span></button>
+      <button class="share-btn" onclick="sharePost()">🔗 Share</button>
+    </div>
   </div>
 
   <div class="card">
-    <img src="https://picsum.photos/400/500?2">
+    <img src="https://picsum.photos/400/600?2">
     <p>Study today, shine tomorrow.</p>
+    <div class="actions">
+      <button class="like-btn" onclick="likePost(this)">❤️ <span>0</span></button>
+      <button class="share-btn" onclick="sharePost()">🔗 Share</button>
+    </div>
   </div>
 
   <div class="card">
-    <img src="https://picsum.photos/400/550?3">
+    <img src="https://picsum.photos/400/600?3">
     <p>Virat Kohli mindset: Never give up.</p>
+    <div class="actions">
+      <button class="like-btn" onclick="likePost(this)">❤️ <span>0</span></button>
+      <button class="share-btn" onclick="sharePost()">🔗 Share</button>
+    </div>
   </div>
 
   <div class="card">
-    <img src="https://picsum.photos/400/520?4">
+    <img src="https://picsum.photos/400/600?4">
     <p>Best Instagram bio ideas.</p>
+    <div class="actions">
+      <button class="like-btn" onclick="likePost(this)">❤️ <span>0</span></button>
+      <button class="share-btn" onclick="sharePost()">🔗 Share</button>
+    </div>
   </div>
+
 </div>
+
+<script>
+function likePost(btn) {
+  let span = btn.querySelector("span");
+  span.innerText = parseInt(span.innerText) + 1;
+}
+
+function sharePost() {
+  if (navigator.share) {
+    navigator.share({
+      title: "InspireWall",
+      text: "Motivational content from InspireWall",
+      url: window.location.href
+    });
+  } else {
+    alert("Share not supported on this device");
+  }
+}
+</script>
 
 </body>
 </html>
