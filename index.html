@@ -1,179 +1,82 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Mindset</title>
+  <title>InspireWall</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Firebase CDN -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      margin: 0;
-      background: #f2f2f2;
-    }
-
-    /* ================= AUTH SECTION ================= */
-    #authSection {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 18px;
-      width: 90%;
-      max-width: 350px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-
-    .avatar {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      background: #4caf50;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      margin: auto;
-    }
-
-    button {
-      padding: 10px 18px;
-      border: none;
-      border-radius: 8px;
-      background: black;
-      color: white;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-
-    /* ================= FEED SECTION ================= */
-    #feedSection {
-      display: none;
-      padding: 12px;
-    }
-
-    .grid {
-      column-count: 2;
-      column-gap: 12px;
-    }
-
-    .grid img {
-      width: 100%;
-      margin-bottom: 12px;
-      border-radius: 12px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<!-- ================= AUTH ================= -->
-<div id="authSection">
-  <div class="card">
-    <div class="avatar" id="avatar">A</div>
-    <h2 id="name">Guest</h2>
-    <p id="email">Not logged in</p>
+<header class="site-header">
+  <h1>InspireWall</h1>
+  <p>Motivation • Students • Cricket • Tools</p>
+</header>
 
-    <button onclick="googleLogin()">Login with Google</button>
-    <button onclick="logout()">Logout</button>
-  </div>
-</div>
-
-<!-- ================= FEED ================= -->
-<div id="feedSection">
-  <div class="grid">
-    <img src="https://picsum.photos/300/500?1">
-    <img src="https://picsum.photos/300/400?2">
-    <img src="https://picsum.photos/300/450?3">
-    <img src="https://picsum.photos/300/550?4">
-    <img src="https://picsum.photos/300/480?5">
-    <img src="https://picsum.photos/300/530?6">
-  </div>
+<div class="pinterest-grid" id="grid">
+  <!-- Initial Cards -->
 </div>
 
 <script>
-  
-  // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+let imageCount = 1;
+const grid = document.getElementById("grid");
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCILgeG_8IhBpWaN4kuoajW8X83Z0s8GiY",
-  authDomain: "aman12947n-adcc4.firebaseapp.com",
-  projectId: "aman12947n-adcc4",
-  storageBucket: "aman12947n-adcc4.firebasestorage.app",
-  messagingSenderId: "775824275952",
-  appId: "1:775824275952:web:9c22e8d8cb74a723274535",
-  measurementId: "G-Z2PX8JNSW8"
-};
+/* CREATE CARD */
+function createCard() {
+  const card = document.createElement("div");
+  card.className = "card";
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+  const img = document.createElement("img");
+  img.src = `https://picsum.photos/500/${600 + (imageCount % 5) * 80}?random=${imageCount}`;
+  img.onclick = () => window.open(img.src, "_blank");
 
-  f reba = initiali.eApp(f;
-  aseCo fig);
-   = st  uth = fi.ebas..auth();
-  const pro;
+  const p = document.createElement("p");
+  p.innerText = "Stay focused. Keep growing.";
 
-   = new f rebase.auth.G o
-    thPr.vider();
+  const actions = document.createElement("div");
+  actions.className = "actions";
 
-  function goog;
-  g
+  const likeBtn = document.createElement("button");
+  likeBtn.innerHTML = "❤️ <span>0</span>";
+  likeBtn.onclick = () => {
+    const span = likeBtn.querySelector("span");
+    span.innerText = parseInt(span.innerText) + 1;
+  };
 
-   {
-    a th.signI W
-    pup(.rovider);;
-  
+  const downloadBtn = document.createElement("button");
+  downloadBtn.innerText = "⬇ Download";
+  downloadBtn.onclick = () => {
+    const a = document.createElement("a");
+    a.href = img.src;
+    a.download = "image.jpg";
+    a.click();
+  };
 
+  actions.appendChild(likeBtn);
+  actions.appendChild(downloadBtn);
 
-  unct.on logout() {
-    auth. => O
-    
+  card.appendChild(img);
+  card.appendChild(p);
+  card.appendChild(actions);
+
+  grid.appendChild(card);
+  imageCount++;
+}
+
+/* LOAD INITIAL */
+for (let i = 0; i < 8; i++) createCard();
+
+/* INFINITE SCROLL */
+window.addEventListener("scroll", () => {
+  if (
+    window.innerHeight + window.scrollY >=
+    document.body.offsetHeight - 200
+  ) {
+    for (let i = 0; i < 6; i++) createCard();
   }
-   auth.onAu = tateChan.ed(user => {
-    const authSe;
-    = doc ment.getEle = tById("a.thSection");
-    const feedSe;
-
-     d cument g
-      ntById(".eedSection");
-
-    if .user) {
-  =   do.ument.getEl;
-      d("name"..innerText = user.displ.yName;
-   =  doc.ment.;
-      ntById(".mail").innerText = user..mail;
-    =
-        .get.lementById(.avatar")..nnerText =
-  ;
-
-      r.displayNa.e.cha.At(0).t = perCas;
-          authSec.ion.s.yle.dis = y = "no;
-         f e
-      n.style.dis.lay =."block" =    } e;
-          authSec.ion.s.yle.dis = y = "f;
-     
-    ;
+});
 </script>
 
 </body>
